@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="layout/layout :: head"></head>
+<body>
+<div th:replace="layout/layout :: sidebar"></div>
+<div class="main-panel">
+    <nav th:replace="layout/layout :: navbar"></nav>
+    <!-- Content Header (Page header) -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Lista de Empleados</h1>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/" th:href="@{/}">Home</a></li>
+                        <li class="breadcrumb-item active">Lista de Empleado</li>
+                    </ol>
+                </div>
+                <!-- /.col -->
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Tabla de los Empleados en el sistema</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <a href="#" class="btn btn-primary" role="button"
+                               th:href="@{/empleados/new}"> <i class="fas fa-plus-circle"></i>
+                                Crear Empleado
+                            </a>
+                            <table id="tableEmpleados"
+                                   class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Direccion</th>
+                                    <th># Cedula</th>
+                                    <th>Fecha ingreso</th>
+                                    <th>Departamento</th>
+                                    <th>Cargo</th>
+                                    <th>Salario</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="empleado: ${findAllEmpleados}">
+                                    <td th:text="${empleado.nombres + ' ' + empleado.apellidos}"></td>
+                                    <td th:text="${empleado.direccion}"></td>
+                                    <td th:text="${empleado.identificacion}"></td>
+                                    <td th:text="${empleado.fechaIng}"></td>
+                                    <td th:text="${empleado.departamento.descripcion}"></td>
+                                    <td th:text="${empleado.cargo.descripcion}"></td>
+                                    <td th:text="${empleado.salarioBase}"></td>
+                                    <td>
+                                        <a href="#" th:href="@{/empleados/view/{id}(id=${empleado.id})}">
+                                            <i class="far fa-eye"></i>
+                                        </a>
+                                        <a href="#" th:href="@{/empleados/edit/{id}(id=${empleado.id})}">
+                                            <i class="fas fa-user-edit"></i>
+                                        </a>
+                                        <a href="#" th:data-id="${empleado.id}" class="eliminarEmpleado"
+                                           data-toggle="modal" data-target="#deleteModal">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Direccion</th>
+                                    <th># Cedula</th>
+                                    <th>Fecha ingreso</th>
+                                    <th>Departamento</th>
+                                    <th>Cargo</th>
+                                    <th>Salario</th>
+                                    <th></th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                            <!-- Modal -->
+
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            &iquest;Seguro desea eliminar el empleado selecciondo? Esta acci&oacute;n no se puede
+                            revertir.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                    data-dismiss="modal">Cancelar
+                            </button>
+                            <a href="#" class="btn btn-primary" id="btnElminar">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <footer th:replace="layout/layout :: footer"></footer>
+</div>
+<div th:replace="layout/layout :: script"></div>
+<script>
+    $(function () {
+        var element = document.getElementById("linkEmpleados");
+        element.classList.toggle("active");
+        $("#tableEmpleados").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+            "searching": true,
+        });
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+        $('.eliminarEmpleado').click(function () {
+            var empleadoId = $(this).attr('data-id');
+            console.log(empleadoId);
+            $('#btnElminar').attr("href", "/empleados/delete/" + empleadoId);
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body>
+    <div th:replace="layout/layout :: sidebar"></div>
+    <div class="main-panel">
+        <nav th:replace="layout/layout :: navbar"></nav>
+        <!-- Content Header (Page header) -->
+        <div class="content">
+            <!-- Content Header (Page header) -->
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Datos del empleado</h1>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/" th:href="@{/}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/" th:href="@{/empleados/}">Lista Empleados</a></li>
+                        <li class="breadcrumb-item active">Datos empleado</li>
+                    </ol>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Material form contact -->
+                    <div class="card">
+                        <h5 class="card-header info-color white-text text-center py-4">
+                            <strong>Empleado: <span th:text="${empleado.nombres}"></span></strong>
+                        </h5>
+                        <hr />
+                        <div class="card-body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div>Nombre:</div>
+                                        <p class="text-uppercase"><b th:text="${empleado.nombres}"></b></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div>Apellidos:</div>
+                                        <p class="text-uppercase"><b th:text="${empleado.apellidos}"></b></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div>Direcci&oacute;n:</div>
+                                        <p class="text-uppercase"><b th:text="${empleado.direccion}"></b></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div>Fecha ingreso:</div>
+                                        <p class="text-uppercase">
+                                            <b th:text="${empleado.fechaIng}"></b>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div>Fecha de nacimiento:</div>
+                                        <p class="text-uppercase">
+                                            <b th:text="${empleado.fechaNac}"></b>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div>Salario base:</div>
+                                        <p class="text-uppercase">
+                                            <b th:text="${empleado.salarioBase}"></b>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div>N° de Identificaci&oacute;n:</div>
+                                        <p class="text-uppercase"><b th:text="${empleado.identificacion}"></b></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div>Nº de Inss:</div>
+                                                <p class="text-uppercase"><b th:text="${empleado.inss}"></b></p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div>Nº de Empleado:</div>
+                                                <p class="text-uppercase"><b th:text="${empleado.numEmpleado}"></b></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="txtDesde" class="label-control">Desde</label>
+                                            <input id="txtDesde" name="txtDesde" type="text" data-date-format="yyyy-mm-dd"
+                                                   class="form-control date-picker" data-datepicker-color="secondary" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txtHasta" class="label-control">Hasta</label>
+                                            <input id="txtHasta" name="txtHasta" type="text" data-date-format="yyyy-mm-dd"
+                                                   class="form-control date-picker" data-datepicker-color="secondary" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#basicExampleModal" id="btnHorario">
+                                            Ver hora entrada/salida
+                                        </button>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="basicExampleModal" tabindex="-1" role="dialog"
+                                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Horario del empleado
+                                                            <b th:text="${empleado.nombres + ' ' + empleado.apellidos}"></b>
+                                                        </h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body" id="modal-horario-list">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Close
+                                                        </button>
+                                                        <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+                                                        <a href="#" th:href="@{/horario/}" class="nav-link float-right">Ir a horarios</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h3>Ver archivos del empleado:</h3>
+                                    </div>
+                                    <div class="col-md-6"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Card content-->
+                    </div>
+                </div>
+            </div>
+            <!-- /.content -->
+        </div>
+        <footer th:replace="layout/layout :: footer"></footer>
+    </div>
+    <div th:replace="layout/layout :: script"></div>
+    <script>
+        $(document).ready(function () {
+            function getContent(desde, hasta) {
+                //create url to request fragment
+                var url = '/empleados/horario?desde=' + desde + '&hasta=' + hasta;
+                //load fragment and replace content
+                $('#modal-horario-list').load(url);
+            }
+
+            $('#btnHorario').click(function () {
+                var desde = $('#txtDesde');
+                var hasta = $('#txtHasta');
+                //block of code that runs when the click event triggers
+                getContent(desde.val(), hasta.val())
+            });
+        });
+        $(function () {
+            var element = document.getElementById("linkEmpleados");
+            element.classList.toggle("active");
+        });
+    </script>
+</body>
+
+</html>

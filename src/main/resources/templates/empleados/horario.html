@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="horario">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Fecha</th>
+            <th scope="col">Hora Entrada</th>
+            <th scope="col">Hora Salida</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="horario:${horarioList}">
+            <th th:text="${horario.horarioPK.fecha}" scope="row">1</th>
+            <td th:text="${horario.horaEntrada}">Otto</td>
+            <td th:text="${horario.horaSalida}">@mdo</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

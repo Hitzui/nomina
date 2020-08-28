@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body>
+    <div th:replace="layout/layout :: sidebar"></div>
+    <div class="main-panel">
+        <nav th:replace="layout/layout :: navbar"></nav>
+        <!-- Content Header (Page header) -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">Lista de Empleados</h1>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/" th:href="@{/}">Home</a></li>
+                            <li class="breadcrumb-item active">Horarios de entrada y salida</li>
+                        </ol>
+                    </div>
+                    <!-- /.col -->
+                </div>
+
+                <!-- Small boxes (Stat box) -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Hora de entrada/salida de los empleados al dia de hoy</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <div>
+                                    <!-- Form -->
+                                    <form method="POST" th:object="${horario}" class="text-center row"
+                                        style="color: #757575;" th:action="@{/horario/index}" action="#">
+                                        <div class="col-md-3">
+                                            <!-- Empleado -->
+                                            <select id="empleado" th:field="*{empleado}" class="selectpicker"
+                                                data-style="btn btn-primary" data-live-search="true">
+                                                <option value="" disabled>Choose option</option>
+                                                <option th:each="empleado: ${findAllEmpleadosActivos}"
+                                                    th:value="${empleado.id}" th:text="${empleado.nombres}"></option>
+                                            </select>
+                                        </div>
+                                        <!-- Name -->
+                                        <div class="col-md-2">
+                                            <div class="md-form">
+                                                <label for="fecha">Fecha</label>
+                                                <input type="text" id="fecha" th:field="*{horarioPK.fecha}"
+                                                    data-date-format="yyyy-mm-dd" class="form-control date-picker"
+                                                    data-datepicker-color="secondary" />
+                                            </div>
+                                        </div>
+                                        <!-- Hora de entrada -->
+                                        <div class="md-form col-md-2">
+                                            <label for="horaEntrada">Hora Entrada</label>
+                                            <input th:field="*{horaEntrada}" id="horaEntrada" type="text"
+                                                class="form-control datetimepicker" />
+                                        </div>
+                                        <!-- Hora de salida -->
+                                        <div class="md-form col-md-2">
+                                            <label for="horaSalida">Hora Salida</label>
+                                            <input th:field="*{horaSalida}" id="horaSalida" type="text"
+                                                class="form-control datetimepicker" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <!-- Send button -->
+                                            <button
+                                                class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
+                                                type="submit">Aceptar
+                                            </button>
+                                        </div>
+                                    </form>
+                                    <!-- Form -->
+                                </div>
+                                <div class="table-responsive">
+                                    <table id="tableEmpleados" class="table table-hover table-bordered table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Empleado</th>
+                                                <th>Fecha</th>
+                                                <th>Hora Entreda</th>
+                                                <th>Hora Salida</th>
+                                                <th>Opciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!--/*@thymesVar id="findAllHorariosNow" type="java.uitl.List<com.dysconcsa.app.nomina.model.Horario>"*/-->
+                                            <tr th:each="horario: ${findAllHorariosNow}">
+                                                <!--/*@thymesVar id="empleado" type="com.dysconcsa.app.nomina.model.Empleado"*/-->
+                                                <td class="nav-item">
+                                                    <!--/*@thymesVar id="empleado" type="com.dysconcsa.app.nomina.model.Empleado"*/-->
+                                                    <a class="nav-link" href="#"
+                                                        th:href="@{/empleados/view/{id}(id=${horario.empleado.id})}"
+                                                        th:text="${horario.empleado.nombres + ' ' + horario.empleado.apellidos}">
+                                                    </a>
+                                                </td>
+                                                <!--/*@thymesVar id="horarioPK" type="com.dysconcsa.app.nomina.model.Horario"*/-->
+                                                <td th:text="${horario.horarioPK.fecha}"></td>
+                                                <td th:text="${horario.horaEntrada}"></td>
+                                                <td th:text="${horario.horaSalida}"></td>
+                                                <td>
+                                                    <a href="#" th:data-id="${horario}"
+                                                        class="eliminarHorario" data-toggle="modal"
+                                                        data-target="#deleteModal">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Empleado</th>
+                                                <th>Fecha</th>
+                                                <th>Hora Entreda</th>
+                                                <th>Hora Salida</th>
+                                                <th>Opciones</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                &iquest;Seguro desea eliminar la hora establecida del empleado selecciondo? Esta
+                                acci&oacute;n no se puede
+                                revertir.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
+                                </button>
+                                <a href="#" class="btn btn-primary" id="btnElminar">Eliminar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer th:replace="layout/layout :: footer"></footer>
+        </div>
+        <div th:replace="layout/layout :: script"></div>
+        <script>
+            $(function () {
+                var element = document.getElementById("linkHorario");
+                element.classList.toggle("active");
+                $('.eliminarHorario').click(function () {
+                    var horario = $(this).attr('data-id');
+                    console.log(horario);
+                    $('#btnElminar').attr("href", "/horario/delete?" + horario);
+                });
+            });
+            // Material Select Initialization
+            $(document).ready(function () {
+                $('.datetimepicker').datetimepicker({
+                    format: 'LT',
+                    icons: {
+                        time: "fa fa-clock-o",
+                        date: "fa fa-calendar",
+                        up: "fa fa-chevron-up",
+                        down: "fa fa-chevron-down",
+                        previous: 'fa fa-chevron-left',
+                        next: 'fa fa-chevron-right',
+                        today: 'fa fa-screenshot',
+                        clear: 'fa fa-trash',
+                        close: 'fa fa-remove'
+                    }
+                });
+            });
+        </script>
+</body>
+
+</html>
